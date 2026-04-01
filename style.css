@@ -1,0 +1,148 @@
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #e2e8f0;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 950px;
+    margin: auto;
+}
+
+/* ===== HEADINGS ===== */
+h1 {
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #38bdf8, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+h2 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: #38bdf8;
+    position: relative;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #6366f1;
+    margin-top: 5px;
+    border-radius: 2px;
+}
+
+h3 {
+    margin-top: 20px;
+    color: #cbd5f5;
+}
+
+/* ===== TEXT ===== */
+p {
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+/* ===== LINKS ===== */
+a {
+    display: inline-block;
+    padding: 10px 18px;
+    margin: 6px 4px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6366f1, #38bdf8);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(56, 189, 248, 0.4);
+}
+
+/* ===== NAV ===== */
+nav {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* ===== SECTION (CARD STYLE) ===== */
+section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-5px);
+}
+
+/* ===== LISTS ===== */
+ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+/* ===== CODE ===== */
+pre {
+    background-color: #020617;
+    color: #e2e8f0;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+code {
+    font-family: Consolas, monospace;
+}
+
+/* ===== PROFILE IMAGE ===== */
+.profile-image {
+    width: 170px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 20px auto;
+    border: 3px solid #38bdf8;
+    transition: all 0.3s ease;
+}
+
+.profile-image:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 15px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
