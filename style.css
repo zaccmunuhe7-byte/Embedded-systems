@@ -146,3 +146,34 @@ footer {
     color: #94a3b8;
     font-size: 0.9rem;
 }
+
+/* ===== VIDEO CONTAINER ===== */
+.video-container {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.video-container video {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.video-container video:hover {
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+}
+
+/* ===== MEDIA ROW ===== */
+.media-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
