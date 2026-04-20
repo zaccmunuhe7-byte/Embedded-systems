@@ -3,42 +3,131 @@
     <head>
         <p><a href="index.html">Return to Main Page</a></p>
 
-        <title>Week 7 - IoT, ADC/DAC, Arduino IDE & ESP-IDF</title>
+        <title>Week 7 - Arduino IDE & ESP-IDF Installation</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>Week 7 - IoT, ADC/DAC, Arduino IDE & ESP-IDF</h1>
+        <h1>Week 7 - Arduino IDE & ESP-IDF Installation</h1>
         <hr>
+        
         <h2>Overview</h2>
-        <p>This week, we expanded our knowledge of embedded systems by diving into the Internet of Things (IoT), analog-to-digital conversion, and professional development tools for microcontroller programming.</p>
-        <h2>Internet of Things (IoT)</h2>
-        <p>We were introduced to the fundamentals of IoT — the network of physical devices embedded with sensors, software, and connectivity that enables them to collect and exchange data. We learned how embedded systems form the backbone of IoT applications, connecting the physical world to the digital realm.</p>
-        <h2>Analog-to-Digital Converter (ADC) & DAC</h2>
-        <p>We explored the ADC, which converts analog signals from sensors into digital values that microcontrollers can process. We also learned about Digital-to-Analog Converter (DAC), which does the reverse — converting digital values back into analog signals for output devices like speakers or motors.</p>
-        <p>Understanding ADC and DAC is essential for interfacing with real-world sensors and actuators that operate with continuous analog signals.</p>
+        <p>Week 7 represented a significant leap in our embedded systems journey — transitioning from educational platforms to professional-grade development frameworks. We configured the Arduino IDE and ESP-IDF, two industry-standard tools that enable development of sophisticated embedded applications.</p>
+        
         <h2>Arduino IDE</h2>
-        <p>We learned to use the Arduino IDE for writing, compiling, and uploading code to microcontroller boards. The Arduino IDE provides a user-friendly environment with a vast library ecosystem, making it accessible for rapid prototyping and embedded development.</p>
+        <p>The Arduino Integrated Development Environment (IDE) is an open-source software platform that has democratized embedded programming since its inception in 2005.</p>
+        
+        <h3>What is Arduino IDE?</h3>
+        <p>The Arduino IDE is a cross-platform application that provides a simplified interface for writing, compiling, and uploading code to Arduino-compatible microcontroller boards. It abstracts the complexities of hardware registers and build systems, enabling beginners to achieve functional results rapidly.</p>
+        
+        <h3>What Does Arduino IDE Do?</h3>
+        <ul>
+            <li><strong>Code Editor:</strong> Syntax-highlighted text editor with line numbers and basic autocomplete</li>
+            <li><strong>Compiler:</strong> Translates Arduino sketches (C/C++) into machine code</li>
+            <li><strong>Uploader:</strong> Transfers compiled firmware to the microcontroller via USB</li>
+            <li><strong>Serial Monitor:</strong> Displays debug output and enables terminal communication</li>
+            <li><strong>Library Manager:</strong> Provides access to hundreds of community-contributed libraries</li>
+            <li><strong>Board Manager:</strong> Installs support for different microcontroller platforms</li>
+        </ul>
+        
+        <h3>Installation Steps</h3>
+        <p>Following the official documentation at <a href="https://docs.arduino.cc/software/ide/">https://docs.arduino.cc/software/ide/</a>, we installed Arduino IDE 2.3.3 (the latest stable release):</p>
+        
+        <ol>
+            <li><strong>Download:</strong> Retrieved the Linux 64-bit archive from the official Arduino downloads page</li>
+            <li><strong>Extract:</strong> Unpacked the downloaded ZIP file to a designated directory</li>
+            <li><strong>Relocate:</strong> Moved the extracted folder to a permanent location (<code>~/arduino-ide/latest/</code>)</li>
+            <li><strong>Launch:</strong> Executed the <code>arduino-ide</code> binary to initiate the application</li>
+            <li><strong>Configure:</strong> Selected the appropriate board (e.g., Arduino Uno, ESP32) from the Boards Manager</li>
+        </ol>
+        
+        <h3>Where to Learn More</h3>
+        <ul>
+            <li><a href="https://docs.arduino.cc/software/ide/">Official Arduino IDE Documentation</a></li>
+            <li><a href="https://www.arduino.cc/en/Tutorial">Arduino Tutorials</a></li>
+            <li><a href="https://reference.arduino.cc/">Arduino Language Reference</a></li>
+            <li><a href="https://playground.arduino.cc/">Arduino Playground</a></li>
+        </ul>
+        
         <h2>ESP-IDF (ESP32 IoT Development Framework)</h2>
-        <p>We were introduced to ESP-IDF, the official development framework for ESP32 microcontrollers. ESP-IDF is a powerful tool that allows developers to write firmware in C/C++ with full access to the hardware features of the ESP32, including Wi-Fi, Bluetooth, and advanced peripheral control.</p>
+        <p>ESP-IDF is the official development framework for Espressif's ESP32 family of chips — a powerful, feature-rich platform for professional IoT applications.</p>
+        
+        <h3>What is ESP-IDF?</h3>
+        <p>ESP-IDF is a comprehensive software development kit that provides drivers, APIs, and build tools for creating firmware for ESP32, ESP32-S2, ESP32-S3, ESP32-C3, and ESP32-H2 microcontrollers. Unlike the Arduino abstraction, ESP-IDF provides direct access to all hardware features.</p>
+        
+        <h3>What Does ESP-IDF Do?</h3>
+        <ul>
+            <li><strong>Hardware Abstraction:</strong> Provides well-documented drivers for all peripherals</li>
+            <li><strong>Wi-Fi Stack:</strong> Full implementation of 802.11 b/g/n with WPA2/WPA3 security</li>
+            <li><strong>Bluetooth:</strong> BLE and Bluetooth Classic support (on compatible chips)</li>
+            <li><strong>FreeRTOS:</strong> Preemptive multitasking operating system built-in</li>
+            <li><strong>Build System:</strong> CMake-based build configuration</li>
+            <li><strong>OTA Updates:</strong> Over-the-air firmware update capability</li>
+        </ul>
+        
+        <h3>Installation Steps</h3>
+        <p>Following the official ESP-IDF documentation at <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-setup.html">https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-setup.html</a>, we configured the development environment:</p>
+        
+        <ol>
+            <li><strong>Prerequisites:</strong> Installed required packages (git, wget, flex, bison, gperf, python3, python3-pip, cmake, ninja-build)</li>
+            <li><strong>Clone Repository:</strong> Cloned the ESP-IDF repository from GitHub: <code>git clone -b stable --recursive https://github.com/espressif/esp-idf.git</code></li>
+            <li><strong>Install Tools:</strong> Ran <code>./install.sh esp32</code> to download toolchain binaries</li>
+            <li><strong>Set Environment:</strong> Executed <code>./export.sh</code> to configure PATH and environment variables</li>
+            <li><strong>Verify:</strong> Confirmed installation by running <code>idf.py --version</code></li>
+        </ol>
+        
+        <h3>Where to Learn More</h3>
+        <ul>
+            <li><a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/">ESP-IDF Documentation</a></li>
+            <li><a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/linux-setup.html">Linux Setup Guide</a></li>
+            <li><a href="https://esp32.com/">ESP32 Community Forum</a></li>
+            <li><a href="https://github.com/espressif/esp-idf">ESP-IDF GitHub Repository</a></li>
+        </ul>
+        
         <h2>Hands-on: Blinking the Inbuilt LED</h2>
-        <p>Using C programming, we were able to flash code to the ESP32 and blink the inbuilt LED. This practical exercise helped us understand the basics of GPIO (General Purpose Input/Output) control and how to write low-level embedded code.</p>
-        <h2>Debugging</h2>
-        <p>We were also shown how to debug our code using various techniques and tools. Debugging is a critical skill for identifying and fixing issues in embedded firmware, ensuring reliable operation of microcontroller applications.</p>
-        <h2>Pins Basics</h2>
-        <p>We learned about the different types of pins on microcontrollers — GPIO pins, power pins, analog pins, and communication pins (UART, SPI, I2C). Understanding pin mapping and configuration is essential for correctly connecting external components.</p>
+        <p>Using C programming within the ESP-IDF framework, we wrote firmware to blink the ESP32's inbuilt LED. This exercise demonstrated:</p>
+        <ul>
+            <li>GPIO configuration as output</li>
+            <li>Digital write operations</li>
+            <li>Delay functions and timing</li>
+            <li>Building and flashing using <code>idf.py</code></li>
+        </ul>
+        
+        <h2>Debugging Techniques</h2>
+        <p>We explored various debugging methodologies for embedded systems:</p>
+        
+        <ul>
+            <li><strong>Serial Output:</strong> Using <code>printf()</code> to output debug messages via UART</li>
+            <li><strong>LED Indication:</strong> Blinking patterns to indicate program state</li>
+            <li><strong>JTAG Debugging:</strong> Hardware-level stepping and register inspection</li>
+            <li><strong>Logic Analyzers:</strong> Capturing digital signals to verify timing</li>
+            <li><strong>ESP-IDF Logging:</strong> Configurable log levels (ERROR, WARN, INFO, DEBUG)</li>
+        </ul>
+        
+        <h2>Pin Types and Configuration</h2>
+        <p>We studied the various pin categories on microcontrollers:</p>
+        <ul>
+            <li><strong>GPIO Pins:</strong> General-purpose digital input/output</li>
+            <li><strong>Power Pins:</strong> VCC (3.3V/5V) and GND</li>
+            <li><strong>Analog Pins:</strong> Dedicated ADC/DAC channels</li>
+            <li><strong>Communication Pins:</strong> UART (TX/RX), SPI (MOSI/MISO/CLK/CS), I2C (SDA/SCL)</li>
+            <li><strong>Special Pins:</strong> Reset, Boot, Crystal oscillators</li>
+        </ul>
+        
         <h2>Key Learning Outcomes</h2>
         <ul>
-            <li>Understanding the fundamentals of the Internet of Things (IoT)</li>
-            <li>Learning how Analog-to-Digital Converters (ADC) and Digital-to-Analog Converters (DAC) work</li>
-            <li>Using the Arduino IDE for embedded development</li>
-            <li>Working with ESP-IDF for ESP32 development</li>
-            <li>Flashing C code to blink the inbuilt LED</li>
-            <li>Learning debugging techniques for embedded systems</li>
+            <li>Installation and configuration of Arduino IDE 2.3.3</li>
+            <li>Installation and configuration of ESP-IDF for ESP32 development</li>
+            <li>Understanding the differences between Arduino and ESP-IDF development workflows</li>
+            <li>Writing and flashing C code to control hardware peripherals</li>
+            <li>Application of debugging techniques for embedded systems</li>
             <li>Understanding microcontroller pin types and configurations</li>
+            <li>Knowledge of professional-grade embedded development tools</li>
         </ul>
-        <p>Overall, Week 7 was an exciting continuation of our embedded systems journey, equipping us with the skills needed to build IoT applications and work with professional-grade development tools.</p>
+        
+        <p>Week 7 equipped us with professional-grade tools and frameworks that enable development of sophisticated IoT applications — bridging the gap between hobbyist experimentation and industrial embedded engineering.</p>
+        
         <p><a href="index.html">Return to Main Page</a></p>
         <footer>
             <hr>

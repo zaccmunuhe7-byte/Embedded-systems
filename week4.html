@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <p><a href="index.html">Return to Main Page</a></p>
+
+        <title>Week 4 - Introduction to Raspberry Pi Pico</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Week 4 - Introduction to Raspberry Pi Pico</h1>
+        <hr>
+        
+        <h2>Overview</h2>
+        <p>Week 4 introduced us to the Raspberry Pi Pico — a revolutionary microcontroller board that marked the Raspberry Pi Foundation's entry into the microcontroller space. Unlike single-board computers that run operating systems, the Pico operates as a dedicated microcontroller executing a single program directly on hardware.</p>
+        
+        <h2>What is the Raspberry Pi Pico?</h2>
+                <p><i><img src="pico.png" alt="pico" style="width: 400px;height:350px;" class="images"></i></p>
+                <p><i><img src="pico2.png" alt="pico" style="width: 400px;height:350px;" class="images"></i></p>
+
+        <p>The Raspberry Pi Pico is a tiny, affordable microcontroller board based on the RP2040 silicon — a chip designed entirely in-house by the Raspberry Pi Foundation. It represents a deliberate pivot from single-board computers (which run Linux) to microcontrollers (which run bare-metal or RTOS firmware).</p>
+        
+        <h3>Key Specifications</h3>
+        <ul>
+            <li><strong>Processor:</strong> RP2040 — dual-core ARM Cortex-M0+ at up to 133 MHz</li>
+            <li><strong>Memory:</strong> 264KB of SRAM, 2MB of QSPI Flash (external)</li>
+            <li><strong>GPIO:</strong> 30 pins — 26 user-accessible multi-function pins</li>
+            <li><strong>Power:</strong> Operates at 3.3V, accepts 5V via micro-USB or VSYS (1.8V-5.5V)</li>
+            <li><strong>Peripherals:</strong> 2× UART, 2× SPI, 2× I2C, 16× PWM channels, 4× ADC channels</li>
+            <li><strong>Programming:</strong> Drag-and-drop UF2 firmware, SWD debug interface</li>
+        </ul>
+        
+        <h2>Pinout and Pin Functions</h2>
+        <p>Understanding the pinout is fundamental to effective Pico development. Each pin can serve multiple functions through pin multiplexing.</p>
+        
+        <h3>Power Pins</h3>
+        <ul>
+            <li><strong>VBUS:</strong> 5V from USB connection — available when powered via micro-USB</li>
+            <li><strong>VSYS:</strong> Main system input (3.3V-5.5V) — regulated to 3.3V internally</li>
+            <li><strong>3V3:</strong> Regulated 3.3V output — powers the RP2040 and GPIO</li>
+            <li><strong>GND:</strong> Ground reference — multiple pins provided</li>
+            <li><strong>RUN:</strong> Reset pin — pulling low resets the processor</li>
+        </ul>
+        
+        <h3>GPIO Pin Bank</h3>
+        <p>The Pico provides 30 physical pins, 26 of which are user-accessible GPIO pins:</p>
+        <ul>
+            <li><strong>GPIO 0-22:</strong> General-purpose digital input/output</li>
+            <li><strong>GPIO 26-28:</strong> Dedicated analog input channels (ADC0, ADC1, ADC2)</li>
+            <li><strong>GPIO 29:</strong> Connected to onboard LED (digital output only)</li>
+        </ul>
+        
+        <h3>Communication Peripherals</h3>
+        <ul>
+            <li><strong>UART:</strong> Two UART peripherals (UART0 on GP0/GP1, UART1 on GP4/GP5)</li>
+            <li><strong>SPI:</strong> Two SPI controllers (SPI0 on GP0-GP3, SPI1 on GP4-GP7)</li>
+            <li><strong>I2C:</strong> Two I2C controllers (I2C0 on GP0/GP1, I2C1 on GP4/GP5)</li>
+            <li><strong>PWM:</strong> 16 PWM channels — any GPIO can be assigned to PWM</li>
+        </ul>
+        
+        <h2>VBUS (USB Power)</h2>
+        <p>The VBUS pin carries the 5V supply from the USB connection and serves several critical functions:</p>
+        
+        <h3>Power Detection</h3>
+        <ul>
+            <li>The RP2040 can detect USB power presence via the VBUS sense signal</li>
+            <li>Software can query this to determine if the device is USB-powered or battery-powered</li>
+            <li>Enables adaptive power management strategies</li>
+        </ul>
+        
+        <h3>Current Limiting</h3>
+        <ul>
+            <li>USB specification limits current to 500mA maximum</li>
+            <li>VBUS can supply this current to external components</li>
+            <li>Important for designing USB-powered projects</li>
+        </ul>
+        
+        <h3>Power Switching</h3>
+        <ul>
+            <li>When both USB and external power (via VSYS) are present, VBUS typically takes precedence</li>
+            <li>External circuits can implement automatic switching between power sources</li>
+            <li>Critical for battery-backed systems</li>
+        </ul>
+        
+        <h2>Boot Process and BOOTSEL</h2>
+        <p>Understanding the boot sequence is essential for troubleshooting and custom firmware development.</p>
+        
+        <h3>Boot Sequence</h3>
+        <ol>
+            <li><strong>Power-On:</strong> Upon applying power (USB or VSYS), the RP2040 executes ROM bootloader</li>
+            <li><strong>Flash Access:</strong> The bootloader reads program data from external QSPI Flash</li>
+            <li><strong>Execution:</strong> The loaded program begins execution from the <code>main()</code> entry point</li>
+            <li><strong>User Mode:</strong> Normal operation — the microcontroller runs the uploaded firmware</li>
+        </ol>
+        
+        <h3>BOOTSEL Button</h3>
+        <p>The BOOTSEL button provides a mechanism for entering bootloader mode without external programming hardware:</p>
+        <ul>
+            <li><strong>Activation:</strong> Press and hold BOOTSEL while connecting USB or pressing RUN</li>
+            <li><strong>Mass Storage Mode:</strong> The Pico appears as a USB drive named "RPI-RP2"</li>
+            <li><strong>Firmware Upload:</strong> Drag and drop a .uf2 (USB Floppible Format) file onto the drive</li>
+            <li><strong>Automatic Reboot:</strong> After file transfer, the device automatically reboots and runs the new firmware</li>
+        </ul>
+        
+        <h3>UF2 Format</h3>
+        <p>The USB Floppible Format (UF2) is a Microsoft-designed format for flashing devices over USB mass storage:</p>
+        <ul>
+            <li>Simple drag-and-drop interface — no specialized software required</li>
+            <li>Built-in protection against incorrect firmware installation</li>
+            <li>Supported by various microcontroller platforms beyond the Pico</li>
+        </ul>
+        <hr>
+        <h3>Programming the Pico</h3>
+        <p>we programmed the pico to light up the onboard LED using C and the Pico SDK.we also tried the same using microPython on Thonny , the results are as shown below on the images,
+            we also tried to include external leds and rgbs and included some resistor so as to ensure that th RGB didn't burn out :</p>
+                        <p><i><img src="img3.jpeg" alt="pico" style="width: 400px;height:350px;" class="images"></i></p>
+                        <p><i><img src="img4.jpeg" alt="pico" style="width: 400px;height:350px;" class="images"></i></p>
+
+        <h2>Documentation and Resources</h2>
+        <p>The Raspberry Pi Foundation provides extensive documentation:</p>
+        <ul>
+            <li><a href="https://datasheets.raspberrypi.com/pico/pico-datasheet.pdf">Pico Datasheet</a> — Complete hardware specifications</li>
+            <li><a href="https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf">RP2040 Datasheet</a> — Processor architecture and register definitions</li>
+            <li><a href="https://datasheets.raspberrypi.com/pico/raspberry-pi-pico-c-sdk.pdf">Pico C SDK</a> — Software development kit documentation</li>
+            <li><a href="https://projects.raspberrypi.org/en/projects/get-started-with-pico">Getting Started</a> — Official tutorial series</li>
+        </ul>
+        
+        <h2>Applications and Use Cases</h2>
+        <p>The Raspberry Pi Pico is suitable for numerous embedded applications:</p>
+        
+        <ul>
+            <li><strong>Data Logging:</strong> Reading sensors and storing data to SD cards</li>
+            <li><strong>Robotics:</strong> Motor control, sensor feedback, navigation</li>
+            <li><strong>Industrial Control:</strong> PLC replacement, machine monitoring</li>
+            <li><strong>Prototyping:</strong> Rapid hardware-software co-development</li>
+            <li><strong>Education:</strong> Learning embedded programming fundamentals</li>
+            <li><strong>Wearable Electronics:</strong> Compact, low-power embedded systems</li>
+            <li><strong>Audio Projects:</strong> Synthesizers, samplers, effects processors</li>
+        </ul>
+        
+        <h2>Key Learning Outcomes</h2>
+        <ul>
+            <li>Comprehension of microcontroller fundamentals and their distinction from single-board computers</li>
+            <li>Proficiency in reading and interpreting the Pico pinout diagram</li>
+            <li>Understanding of VBUS power management and USB power specifications</li>
+            <li>Mastery of the BOOTSEL button and UF2 firmware upload mechanism</li>
+            <li>Knowledge of communication peripherals (UART, SPI, I2C, PWM)</li>
+            <li>Ability to locate and utilize official documentation for technical reference</li>
+            <li>Foundation for advanced Pico projects involving Wi-Fi (Pico W) and external peripherals</li>
+        </ul>
+        
+        <p>Week 4 established a solid foundation for embedded systems development using the Raspberry Pi Pico — a platform that balances accessibility with professional-grade capabilities.</p>
+        
+        <p><a href="index.html">Return to Main Page</a></p>
+        <footer>
+            <hr>
+            <p>&copy; 2026 Embedded Systems GEARBOX-EUROPLACER</p>
+            <p>Author: @Zacchaues Munuhe</p>
+        </footer>
+    </body>
+</html>

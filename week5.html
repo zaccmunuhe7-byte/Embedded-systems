@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <p><a href="index.html">Return to Main Page</a></p>
+
+        <title>Week 5 - Advanced Raspberry Pi Pico W: Wi-Fi & Web Server</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Week 5 - Advanced Raspberry Pi Pico W: Wi-Fi & Web Server</h1>
+        <hr>
+        
+        <h2>Overview</h2>
+        <p>Week 5 elevated our embedded capabilities by introducing wireless connectivity to the Raspberry Pi Pico platform. Building upon the foundational knowledge from Week 4, we explored the Pico W's integrated Wi-Fi functionality and implemented a web server — transforming our microcontroller into a remotely accessible IoT device.</p>
+        
+        <h2>What is the Raspberry Pi Pico W?</h2>
+        <p>The Raspberry Pi Pico W is the wireless-enabled variant of the original Pico, incorporating an Infineon CYW43439 module that provides 802.11n Wi-Fi (2.4GHz) and Bluetooth 5.0 (Bluetooth Classic and LE). This addition transforms the Pico from a standalone microcontroller into a network-connected device capable of participating in IoT ecosystems.</p>
+        
+        <h3>Key Differences from Pico (Non-W)</h3>
+        <ul>
+            <li><strong>Wireless Module:</strong> CYW43439 provides Wi-Fi and Bluetooth connectivity</li>
+            <li><strong>LED Behavior:</strong> Onboard LED (GPIO 29) is now connected to the Wi-Fi module</li>
+            <li><strong>Power Consumption:</strong> Higher current draw when Wi-Fi is active</li>
+            <li><strong>Form Factor:</strong> Identical pinout — Pico W is a drop-in replacement</li>
+        </ul>
+        
+        <h2>Wi-Fi Configuration and Initialization</h2>
+        <p>Connecting to wireless networks requires specific MicroPython modules and proper configuration.</p>
+        
+        <h3>Network Module</h3>
+        <p>The <code>network</code> module provides the interface for Wi-Fi operations:</p>
+        
+        <pre><code>import network
+import time
+
+# Create Wi-Fi interface
+wlan = network.WLAN(network.STA_IF)
+
+# Activate the interface
+wlan.active(True)
+
+# Scan for available networks
+networks = wlan.scan()
+
+# Connect to a network
+wlan.connect('SSID', 'password')
+
+# Wait for connection
+while not wlan.isconnected():
+    time.sleep(1)
+    
+print('Connected:', wlan.ifconfig())</code></pre>
+        
+        <h3>Wi-Fi Modes</h3>
+        <ul>
+            <li><strong>Station (STA):</strong> Connect to an existing Wi-Fi network (most common for IoT)</li>
+            <li><strong>Access Point (AP):</strong> Create a Wi-Fi network for other devices to connect to</li>
+        </ul>
+        
+        <h3>Connection Parameters</h3>
+        <ul>
+            <li><strong>SSID:</strong> The network name (Service Set Identifier)</li>
+            <li><strong>Password:</strong> WPA2/WPA3 security credential</li>
+            <li><strong>Channel:</strong> Wi-Fi channel (1-11 for 2.4GHz)</li>
+            <li><strong>Security:</strong> WPA2-PSK or WPA3-PSK</li>
+        </ul>
+        
+        <h2>Building a Web Server on Pico W</h2>
+        <p>A web server enables remote interaction with the Pico W through any web browser — providing a user interface without dedicated applications.</p>
+        
+        <h3>What is a Web Server?</h3>
+        <p>A web server is software that listens for HTTP (Hypertext Transfer Protocol) requests from clients (web browsers) and responds with appropriate data (HTML pages, JSON, status codes). On the Pico W, we implement a lightweight HTTP server using MicroPython's <code>socket</code> module.</p>
+        
+        <h3>How Web Servers Work</h3>
+        <ol>
+            <li><strong>Client Request:</strong> A browser sends an HTTP request to the server's IP address</li>
+            <li><strong>Request Parsing:</strong> The server parses the request method (GET, POST) and path</li>
+            <li><strong>Processing:</strong> The server executes appropriate logic based on the request</li>
+            <li><strong>Response Generation:</strong> The server constructs an HTTP response with status code and content</li>
+            <li><strong>Transmission:</strong> The response is sent back to the client</li>
+            <li><strong>Rendering:</strong> The browser displays the received content</li>
+        </ol>
+        
+        <h3>Implementation Steps</h3>
+        
+        <h4>1. Create a Socket</h4>
+        <pre><code>import socket
+
+# Create TCP socket
+addr = socket.getaddrinfo('0.0.0.0', 80)[0][-1]
+s = socket.socket()
+s.bind(addr)
+s.listen(1)</code></pre>
+        
+        <h4>2. Handle Requests</h4>
+        <pre><code>while True:
+    conn, addr = s.accept()
+    request = conn.recv(1024)
+    request = str(request)
+    
+    # Parse the request path
+    if '/led/on' in request:
+        led.value(1)
+        response = 'LED turned ON'
+    elif '/led/off' in request:
+        led.value(0)
+        response = 'LED turned OFF'
+    else:
+        response = 'Pico W Web Server'
+    
+    # Send HTTP response
+    conn.send('HTTP/1.1 200 OK\n')
+    conn.send('Content-Type: text/html\n')
+    conn.send('Connection: close\n\n')
+    conn.send(response)
+    conn.close()</code></pre>
+        
+        <h4>3. Serve HTML Pages</h4>
+        <pre><code>html = """&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Pico W Control&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Raspberry Pi Pico W&lt;/h1&gt;
+    &lt;p&gt;LED Status: {}&lt;/p&gt;
+    &lt;a href="/led/on"&gt;Turn ON&lt;/a&gt;
+    &lt;a href="/led/off"&gt;Turn OFF&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;"""</code></pre>
+        
+        <h2>Creating a Home Automation Dashboard</h2>
+        <p>We implemented a comprehensive web-based control interface for home automation:</p>
+        
+        <h3>Features Implemented</h3>
+        <ul>
+            <li><strong>Real-Time Status:</strong> Display current GPIO states and sensor readings</li>
+            <li><strong>Control Buttons:</strong> Toggle outputs (LEDs, relays) via web interface</li>
+            <li><strong>Sensor Display:</strong> Show temperature, humidity, or other sensor data</li>
+            <li><strong>Responsive Design:</strong> Mobile-friendly interface that works on phones and tablets</li>
+        </ul>
+        
+        <h3>HTML/CSS Dashboard</h3>
+        <pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;style&gt;
+        body { font-family: Arial; padding: 20px; }
+        .card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
+        .btn { padding: 10px 20px; background: #007bff; color: white; text-decoration: none; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Home Automation&lt;/h1&gt;
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Temperature&lt;/h2&gt;
+        &lt;p&gt;{}&amp;deg;C&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Lights&lt;/h2&gt;
+        &lt;a class="btn" href="/light/on"&gt;ON&lt;/a&gt;
+        &lt;a class="btn" href="/light/off"&gt;OFF&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        
+        <h2>Debugging Techniques</h2>
+        <p>Effective debugging is essential for developing reliable embedded systems. We employed multiple strategies:</p>
+        
+        <h3>Serial Output Debugging</h3>
+        <ul>
+            <li><strong>Print Statements:</strong> Output variable values and program state via UART</li>
+            <li><strong>REPL Access:</strong> Use the MicroPython REPL for interactive debugging</li>
+            <li><strong>Exception Handling:</strong> Catch and display errors to identify issues</li>
+        </ul>
+        
+        <h3>LED Indicator Debugging</h3>
+        <ul>
+            <li><strong>Status Indication:</strong> Blink patterns to indicate program state</li>
+            <li><strong>Error Codes:</strong> Different blink sequences for different error conditions</li>
+            <li><strong>Progress Indication:</strong> Blink during initialization phases</li>
+        </ul>
+        
+        <h3>Network Debugging</h3>
+        <ul>
+            <li><strong>Connection Status:</strong> Print Wi-Fi connection state during startup</li>
+            <li><strong>IP Address Display:</strong> Show assigned IP address for browser access</li>
+            <li><strong>Request Logging:</strong> Print incoming HTTP requests for debugging</li>
+        </ul>
+        
+        <h3>Hardware Debugging Tools</h3>
+        <ul>
+            <li><strong>Logic Analyzers:</strong> Capture and visualize digital signals</li>
+            <li><strong>Multimeters:</strong> Verify voltage levels and continuity</li>
+            <li><strong>Oscilloscopes:</strong> Observe signal timing and waveform quality</li>
+        </ul>
+        
+        <h2>Advanced Wi-Fi Features</h2>
+        <p>Beyond basic connectivity, we explored advanced networking capabilities:</p>
+        
+        <h3>Access Point Mode</h3>
+        <p>The Pico W can function as a Wi-Fi access point, creating its own network:</p>
+        <pre><code>ap = network.WLAN(network.AP_IF)
+ap.active(True)
+ap.config(essid='PicoW-Setup', password='password')
+print('AP IP:', ap.ifconfig())</code></pre>
+        
+        <h3>HTTP Client</h3>
+        <p>The Pico W can act as an HTTP client to send data to cloud services:</p>
+        <pre><code>import urequests
+
+# Send data to a web service
+response = urequests.get('https://api.example.com/data')
+print(response.status_code)</code></pre>
+        
+        <h3>MQTT Protocol</h3>
+        <p>For IoT applications, MQTT provides lightweight messaging:</p>
+        <ul>
+            <li><strong>Publish:</strong> Send sensor data to a broker</li>
+            <li><strong>Subscribe:</strong> Receive commands from a broker</li>
+            <li><strong>Broker:</strong> Central server that routes messages (e.g., Mosquitto, HiveMQ)</li>
+        </ul>
+        
+        <h2>Security Considerations</h2>
+        <p>Network-connected devices require careful security attention:</p>
+        
+        <ul>
+            <li><strong>Wi-Fi Security:</strong> Use WPA2/WPA3 — never open networks</li>
+            <li><strong>Input Validation:</strong> Sanitize all HTTP request parameters</li>
+            <li><strong>Credential Storage:</strong> Never hardcode passwords in source code</li>
+            <li><strong>Updates:</strong> Keep firmware updated for security patches</li>
+            <li><strong>Firewalls:</strong> Restrict network access to necessary services only</li>
+        </ul>
+        
+        <h2>Push Button LED Control</h2>
+        <p>Beyond network-based control, we implemented physical input handling through push buttons — a fundamental interaction paradigm in embedded systems.</p>
+        
+        <h3>Debouncing Algorithm</h3>
+        <p>Mechanical push buttons exhibit a phenomenon known as "contact bounce" — when the button is pressed or released, the contacts physically bounce, causing multiple rapid transitions that can be misinterpreted as multiple button presses. To mitigate this, we implemented a debouncing algorithm:</p>
+        <ul>
+            <li><strong>State Monitoring:</strong> Continuously read the button's GPIO state</li>
+            <li><strong>Time-Based Filtering:</strong> Require the button state to remain stable for a defined period before accepting the input</li>
+            <li><strong>Edge Detection:</strong> Detect only transitions (pressed or released) rather than continuous states</li>
+        </ul>
+        
+        <h3>Toggle Functionality</h3>
+        <p>We implemented a toggle mechanism where each button press alternates the LED state:</p>
+        <ul>
+            <li><strong>First Press:</strong> The onboard LED illuminates — indicating an "ON" state</li>
+            <li><strong>Second Press:</strong> The onboard LED extinguishes — indicating an "OFF" state</li>
+            <li><strong>Subsequent Presses:</strong> The cycle repeats, creating a reliable binary state control</li>
+        </ul>
+        <p>This exercise demonstrated the intersection of input handling, state management, and output control — the foundational pattern upon which all embedded user interfaces are built.</p>
+        
+        <h2>HC-SR04 Ultrasonic Sensor</h2>
+        <p>We interfaced the HC-SR04 ultrasonic ranging sensor with the Pico W to measure distance to objects — a sensor commonly employed in obstacle detection, robotics navigation, and proximity sensing applications.</p>
+        
+        <h3>How Ultrasonic Ranging Works</h3>
+        <p>The HC-SR04 utilizes the time-of-flight principle to determine distance:</p>
+        <ul>
+            <li><strong>Trigger Pulse:</strong> The microcontroller sends a 10-microsecond trigger pulse to the sensor</li>
+            <li><strong>Ultrasonic Emission:</strong> The sensor emits an 8-cycle ultrasonic burst at 40kHz</li>
+            <li><strong>Echo Detection:</strong> The sensor listens for the reflected sound wave</li>
+            <li><strong>Time Measurement:</strong> The duration between emission and echo reception is measured</li>
+            <li><strong>Distance Calculation:</strong> Using the speed of sound (approximately 343 m/s), distance is computed as: Distance = (Time × Speed of Sound) / 2</li>
+        </ul>
+        
+        <h3>Distance Measurement Implementation</h3>
+        <p>We configured the Pico W to:</p>
+        <ul>
+            <li>Send trigger pulses at regular intervals</li>
+            <li>Measure the echo pulse width using timer inputs</li>
+            <li>Calculate distance in centimeters based on the time measurement</li>
+            <li>Print the measured distance to the serial console for real-time monitoring</li>
+        </ul>
+        
+        <h2>Personal Project: Proximity Alert System</h2>
+        <p>Extending the ultrasonic measurement capability, I developed a comprehensive proximity alert system that integrates multiple output modalities to provide intuitive distance feedback.</p>
+        
+        <h3>System Components</h3>
+        <ul>
+            <li><strong>HC-SR04 Ultrasonic Sensor:</strong> Measures distance to nearby objects</li>
+            <li><strong>I2C LCD Display:</strong> 16×2 character display shows distance readings and status messages</li>
+            <li><strong>Piezoelectric Buzzer:</strong> Emits audible warnings at configurable intervals</li>
+            <li><strong>Onboard LED:</strong> Provides visual indication of danger states</li>
+        </ul>
+        
+        <h3>Operational Logic</h3>
+        <p>The system implements a tiered alert mechanism based on measured distance:</p>
+        
+        <h4>Safe Zone (Distance > 20 cm)</h4>
+        <ul>
+            <li>The LCD displays "SAFE" along with the measured distance</li>
+            <li>The buzzer remains silent</li>
+            <li>The onboard LED is extinguished</li>
+        </ul>
+        
+        <h4>Warning Zone (Distance ≤ 20 cm)</h4>
+        <ul>
+            <li>The LCD displays "WARNING" along with the measured distance</li>
+            <li>The buzzer emits periodic beeps at a moderate rate</li>
+            <li>The onboard LED remains off</li>
+        </ul>
+        
+        <h4>Danger Zone (Distance < 15 cm)</h4>
+        <ul>
+            <li>The LCD displays "DANGER" along with the measured distance</li>
+            <li>The buzzer increases its beep rate significantly — indicating imminent collision</li>
+            <li>The onboard LED illuminates continuously — providing visual warning</li>
+        </ul>
+
+        <h3>Project Demonstration</h3>
+        <p>This project exemplifies the integration of multiple subsystems — input sensing, conditional logic, and multi-modal output — into a cohesive embedded application. The combination of visual, auditory, and textual feedback ensures that users receive clear, unambiguous information regardless of their sensory capabilities or environmental conditions.</p>
+                <p><i><img src="img6.jpeg" alt="Assignment 1 Result" style="width: 400px;height:350px;" class="images"></i></p>
+                <p><i><img src="img5.jpeg" alt="Assignment 1 Result" style="width: 400px;height:350px;" class="images"></i></p>
+                <p><i><img src="img12.jpeg" alt="Assignment 1 Result" style="width: 400px;height:350px;" class="images"></i></p>
+                <p><i><img src="img10.jpeg" alt="Assignment 1 Result" style="width: 400px;height:350px;" class="images"></i></p>
+
+        <div class="media-row">
+            <figure class="video-container">
+                <video controls preload="metadata" playsinline>
+                    <source src="vid1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <figcaption>Proximity alert system demo 1</figcaption>
+            </figure>
+
+            <figure class="video-container">
+                <video controls preload="metadata" playsinline>
+                    <source src="tiktok pico pi w.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <figcaption>Proximity alert system demo 2</figcaption>
+            </figure>
+        </div>
+
+        <h2>Key Learning Outcomes</h2>
+        <ul>
+            <li>Understanding the Pico W's Wi-Fi capabilities and the CYW43439 module</li>
+            <li>Proficiency in configuring Wi-Fi connections using MicroPython</li>
+            <li>Implementation of HTTP web servers using socket programming</li>
+            <li>Creation of responsive HTML dashboards for device control</li>
+            <li>Application of debugging techniques specific to networked embedded systems</li>
+            <li>Comprehension of HTTP protocol fundamentals (GET, POST, status codes)</li>
+            <li>Knowledge of security best practices for IoT devices</li>
+            <li>Foundation for advanced IoT projects (MQTT, cloud integration)</li>
+        </ul>
+        
+        <p>Week 5 transformed our understanding of embedded systems — from isolated devices to network-connected IoT nodes capable of remote monitoring and control. The ability to serve web pages directly from a microcontroller opens boundless possibilities for interactive projects and professional applications.</p>
+        
+        <p><a href="index.html">Return to Main Page</a></p>
+        <footer>
+            <hr>
+            <p>&copy; 2026 Embedded Systems GEARBOX-EUROPLACER</p>
+            <p>Author: @Zacchaues Munuhe</p>
+        </footer>
+    </body>
+</html>

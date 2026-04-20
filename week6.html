@@ -3,45 +3,153 @@
     <head>
         <p><a href="index.html">Return to Main Page</a></p>
 
-        <title>Week 6 - Introduction to Raspberry Pi Pico W</title>
+        <title>Week 6 - IoT, ADC & DAC</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>Week 6 - Introduction to Raspberry Pi Pico W</h1>
+        <h1>Week 6 - IoT, ADC & DAC</h1>
         <hr>
+        
         <h2>Overview</h2>
-        <p>This week, we dived into the world of microcontrollers with a focus on the Raspberry Pi Pico W. The Pico W is a powerful and versatile microcontroller board that combines the capabilities of the original Raspberry Pi Pico with built-in Wi-Fi connectivity, making it an excellent choice for IoT projects and embedded systems development.</p>
-        <p>We were able to configure it to run MicroPython, a popular programming language for microcontrollers, which allows for rapid development and easy prototyping. We explored the various features of the Pico W, including its GPIO pins, ADC capabilities, and Wi-Fi functionality.</p> 
-        <p>Through hands-on exercises, we learned how to write MicroPython code to control the Pico W, read sensor data, and establish wireless communication. This week's training provided a solid foundation for working with the Raspberry Pi Pico W and set the stage for more advanced projects in the coming weeks.</p>
-        <img src="img6.jpeg" alt="Raspberry Pi Pico W" style="width:400px;height:400px;" class="images">
-        <h2>Hands-on Projects</h2>
-        <p>We were able to integrate the Pico with ultrasonic sensors and I2C LCD displays and buzzer to measure distance and display information.</p>
-        <img src="img5.jpeg" alt="Ultrasonic Sensor" style="width:400px;height:400px;" class="images">
-        <img src="img2.jpeg" alt="MicroPython Configuration" style="width:400px;height:400px;" class="images">
-        <img src="img3.jpeg" alt="Pico W with LCD Display" style="width:400px;height:400px;" class="images">
-        <img src="img4.jpeg" alt="Pico W with Buzzer" style="width:400px;height:400px;" class="images">
-        <h2>Project Demonstrations</h2>
-        <p>We also had the opportunity to light the inbuilt LED and external RGBs at specified intervals.</p>
-        <div class="media-row">
-            <div class="video-container">
-                <video src="tiktok pico pi w.mp4" alt="Pico W with sensors and buzzer" controls onclick="this.requestFullscreen()"></video>
-            </div>
-            <div class="video-container">
-                <video src="vid1.mp4" alt="Pico W with ultrasonic sensor" controls onclick="this.requestFullscreen()"></video>
-            </div>
-        </div>
+        <p>Week 6 marked a pivotal moment in our embedded systems journey — we transitioned from hardware-focused topics to the conceptual frameworks that enable connectivity and analog-digital signal conversion. This week endowed us with understanding of the Internet of Things paradigm and the signal processing techniques essential for interfacing with the physical world.</p>
+        
+        <h2>Internet of Things (IoT)</h2>
+        <p>The Internet of Things (IoT) constitutes the technological framework whereby physical objects — sensors, actuators, appliances, and vehicles — are embedded with computing capability and network connectivity, enabling them to collect, exchange, and act upon data without human intervention.</p>
+        
+        <h3>What is IoT?</h3>
+        <p>At its core, IoT describes a network of interconnected devices that communicate via the Internet, sharing telemetry data and receiving command instructions. These devices typically comprise:</p>
+        <ul>
+            <li><strong>Sensors:</strong> Devices that convert physical phenomena (temperature, pressure, motion, light) into electrical signals</li>
+            <li><strong>Microcontrollers:</strong> Processing units that read sensor data, perform computations, and control actuators</li>
+            <li><strong>Communication Modules:</strong> Wi-Fi, Bluetooth, LoRa, or cellular radios that enable network connectivity</li>
+            <li><strong>Cloud Platforms:</strong> Remote servers that aggregate data, perform analytics, and provide management interfaces</li>
+        </ul>
+        
+        <h3>How IoT Works</h3>
+        <ol>
+            <li><strong>Data Acquisition:</strong> Sensors continuously measure physical quantities and convert them to electrical signals</li>
+            <li><strong>Signal Conditioning:</strong> Analog signals are amplified, filtered, and converted to digital format</li>
+            <li><strong>Local Processing:</strong> The microcontroller processes data, applies algorithms, and makes immediate decisions</li>
+            <li><strong>Transmission:</strong> Processed data is transmitted to cloud platforms via Wi-Fi, cellular, or LPWAN networks</li>
+            <li><strong>Cloud Analytics:</strong> Remote servers store, analyze, and visualize data</li>
+            <li><strong>Action:</strong> Commands are sent back to actuators to effect physical changes</li>
+        </ol>
+        
+        <h3>Advantages of IoT</h3>
+        <ul>
+            <li><strong>Remote Monitoring:</strong> Observe system status from anywhere in the world</li>
+            <li><strong>Automation:</strong> Eliminate manual intervention in routine processes</li>
+            <li><strong>Predictive Maintenance:</strong> Detect anomalies before failures occur</li>
+            <li><strong>Resource Optimization:</strong> Minimize energy consumption and material waste</li>
+            <li><strong>Scalability:</strong> Deploy thousands of devices from a central management platform</li>
+            <li><strong>Data-Driven Decisions:</strong> Base operational choices on quantitative evidence rather than intuition</li>
+        </ul>
+        
+        <h3>Challenges and Considerations</h3>
+        <ul>
+            <li><strong>Security:</strong> Networked devices present attack surfaces for malicious actors</li>
+            <li><strong>Privacy:</strong> Sensitive data collection raises user privacy concerns</li>
+            <li><strong>Interoperability:</strong> Diverse device manufacturers use incompatible protocols</li>
+            <li><strong>Power Consumption:</strong> Continuous connectivity demands significant energy</li>
+            <li><strong>Data Management:</strong> Massive telemetry volumes require efficient storage and processing</li>
+            <li><strong>Reliability:</strong> Network outages can disable critical systems</li>
+        </ul>
+        
+        <h2>Analog-to-Digital Converter (ADC)</h2>
+        <p>The Analog-to-Digital Converter is a peripheral that transforms continuous analog voltage signals into discrete digital values that microcontrollers can process, store, and transmit.</p>
+        
+        <h3>What is an ADC?</h3>
+        <p>Real-world phenomena — temperature, pressure, light intensity, sound — manifest as continuous analog signals. Microcontrollers, however, operate on binary data. The ADC bridges this divide by sampling analog signals at discrete intervals and representing each sample as a numerical value.</p>
+        
+        <h3>How ADC Works</h3>
+        <ol>
+            <li><strong>Sampling:</strong> The ADC measures the input voltage at regular intervals (sampling rate)</li>
+            <li><strong>Quantization:</strong> The measured voltage is compared to reference voltage levels and assigned a digital code</li>
+            <li><strong>Encoding:</strong> The digital code is converted to binary format for the processor</li>
+            <li><strong>Output:</strong> The digital value is stored in a register for software access</li>
+        </ol>
+        
+        <h3>Key ADC Parameters</h3>
+        <ul>
+            <li><strong>Resolution:</strong> The number of bits in the output — a 12-bit ADC provides 4096 possible values (2<sup>12</sup>)</li>
+            <li><strong>Sampling Rate:</strong> The number of conversions per second (samples per second)</li>
+            <li><strong>Reference Voltage:</strong> The maximum voltage that maps to the maximum digital output</li>
+            <li><strong>Input Channels:</strong> The number of analog inputs that can be sampled</li>
+        </ul>
+        
+        <h3>ADC on the Pico W</h3>
+        <p>The Raspberry Pi Pico W features a 12-bit ADC with four input channels — GPIO 26, 27, and 28 are dedicated analog inputs, while channel 3 is connected to the internal temperature sensor.</p>
+        
+        <h3>Advantages of ADC</h3>
+        <ul>
+            <li>Enables microcontrollers to interact with analog sensors</li>
+            <li>Provides precise numerical representation of physical quantities</li>
+            <li>Facilitates signal processing and data analysis</li>
+            <li>Supports closed-loop control systems</li>
+        </ul>
+        
+        <h3>Limitations of ADC</h3>
+        <ul>
+            <li>Quantization error introduces measurement uncertainty</li>
+            <li>Aliasing occurs if sampling rate is insufficient for signal frequency</li>
+            <li>Noise can degrade measurement accuracy</li>
+            <li>Limited resolution may be insufficient for precision applications</li>
+        </ul>
+        
+        <h2>Digital-to-Analog Converter (DAC)</h2>
+        <p>The Digital-to-Analog Converter performs the inverse operation of the ADC — transforming digital values into corresponding analog voltage or current signals.</p>
+        
+        <h3>What is a DAC?</h3>
+        <p>While ADCs convert sensor readings into numbers, DACs convert numbers into physical actions — driving speakers, controlling motor speed, adjusting brightness, or generating test signals.</p>
+        
+        <h3>How DAC Works</h3>
+        <ol>
+            <li><strong>Input:</strong> A digital value (from 0 to 2<sup>n</sup>-1 for n-bit DAC) is loaded into the DAC</li>
+            <li><strong>Conversion:</strong> The DAC generates an output voltage proportional to the input value</li>
+            <li><strong>Scaling:</strong> The output is scaled such that maximum input produces the reference voltage</li>
+            <li><strong>Smoothing:</strong> For audio applications, reconstruction filters smooth the stepped output</li>
+        </ol>
+        
+        <h3>Applications of DAC</h3>
+        <ul>
+            <li>Audio playback (speakers, headphones)</li>
+            <li>Motor speed control</li>
+            <li>LED brightness control (PWM as pseudo-DAC)</li>
+            <li>Signal generation for testing</li>
+            <li>Voltage-controlled oscillators</li>
+            <li>Programmable power supplies</li>
+        </ul>
+        
+        <h3>Advantages of DAC</h3>
+        <ul>
+            <li>Enables digital systems to control analog actuators</li>
+            <li>Provides variable output for continuous control</li>
+            <li>Facilitates signal generation and synthesis</li>
+            <li>Supports feedback control systems</li>
+        </ul>
+        
+        <h3>Limitations of DAC</h3>
+        <ul>
+            <li>Output is quantized — not truly continuous</li>
+            <li>Limited resolution affects precision of control</li>
+            <li>Output bandwidth may be insufficient for high-frequency applications</li>
+            <li>Some DACs require external amplification</li>
+        </ul>
+        
         <h2>Key Learning Outcomes</h2>
         <ul>
-            <li>Understanding the features and capabilities of the Raspberry Pi Pico W</li>
-            <li>Configuring the Pico W to run MicroPython using Thonny</li>
-            <li>Writing MicroPython code to control the Pico W and read sensor data</li>
-            <li>Lighting the inbuilt LED and external RGBs at specified intervals</li>
-            <li>Establishing wireless communication using the Pico W’s Wi-Fi functionality</li>
-            <li>Gaining hands-on experience with a powerful microcontroller platform for IoT and embedded systems development</li>
+            <li>Comprehension of IoT architecture, advantages, and challenges</li>
+            <li>Understanding ADC operation, parameters, and applications</li>
+            <li>Understanding DAC operation, parameters, and applications</li>
+            <li>Knowledge of signal conversion between analog and digital domains</li>
+            <li>Foundation for building connected sensor systems</li>
+            <li>Understanding of quantization, sampling, and aliasing concepts</li>
         </ul>
-        <p>Overall, Week 6 was an exciting introduction to the Raspberry Pi Pico W, and I look forward to applying these skills in more advanced IoT projects.</p>
+        
+        <p>Week 6 provided the conceptual foundation for understanding how embedded systems interact with both the physical world and the digital infrastructure of the Internet — essential knowledge for any IoT practitioner.</p>
+        
         <p><a href="index.html">Return to Main Page</a></p>
         <footer>
             <hr>
@@ -49,4 +157,4 @@
             <p>Author: @Zacchaues Munuhe</p>
         </footer>
     </body>
-</html> 
+</html>

@@ -11,38 +11,165 @@
     <body>
         <h1>Week 2 - C Programming & Assembly Language</h1>
         <hr>
+        
         <h2>Overview</h2>
-        <p>In Week 2, we shifted focus from high-level web technologies to the foundational programming languages used in embedded systems and microcontroller development.</p>
+        <p>Week 2 marked a pivotal transition from high-level web technologies to the foundational programming paradigms that underpin all embedded systems development. While HTML and CSS serve as the visible interface through which we document our journey, C and Assembly Language constitute the invisible machinery that animates microcontrollers, orchestrates sensor data, and executes real-time control algorithms. This week endowed us with the intellectual tools necessary to communicate directly with silicon — translating algorithmic intent into electrical signals that govern physical systems.</p>
+        
         <h2>C Programming Language</h2>
-        <p>We learned the C programming language, which is the industry standard for embedded systems development. C provides low-level hardware access while maintaining portability across different microcontroller platforms.</p>
-        <p>We covered the basics of C including:</p>
+        <p>C has reigned supreme as the lingua franca of embedded systems development for over five decades. Its enduring prominence stems from an unparalleled combination of low-level hardware access and cross-platform portability. Unlike high-level languages that abstract away hardware details, C permits direct manipulation of memory addresses, register values, and hardware peripherals — capabilities essential when programming resource-constrained devices such as the Raspberry Pi Pico, Arduino, or STM32 microcontrollers.</p>
+        
+        <h3>Variables and Data Types</h3>
+        <p>Variables serve as named containers for storing data within program memory. In embedded C, selecting the appropriate data type is paramount — each type consumes a specific amount of memory (measured in bytes), and on devices with limited RAM (often 64KB to 256KB), every byte matters.</p>
         <ul>
-            <li>Variables and data types</li>
-            <li>Control structures (if/else, loops)</li>
-            <li>Functions and modular programming</li>
-            <li>Pointers and memory management</li>
-            <li>Bitwise operations</li>
+            <li><strong>char:</strong> A single byte (8 bits) capable of storing ASCII characters or integers from -128 to 127. Commonly used for storing character data and small numerical values.</li>
+            <li><strong>int:</strong> Typically 2 or 4 bytes, depending on architecture, storing integers ranging from -32,768 to 32,767 (16-bit) or -2,147,483,648 to 2,147,483,647 (32-bit). The workhorse of embedded calculations.</li>
+            <li><strong>float:</strong> 4 bytes representing floating-point numbers with approximately 6-7 significant digits. Essential for sensor readings and mathematical computations requiring decimal precision.</li>
+            <li><strong>double:</strong> 8 bytes providing greater precision (15-16 significant digits) for complex scientific calculations, though rarely used in memory-constrained embedded applications.</li>
+            <li><strong>unsigned variants:</strong> Versions of the above (e.g., unsigned int) that exclude negative values, effectively doubling the maximum positive range.</li>
         </ul>
+        
+        <h3>Control Structures</h3>
+        <p>Control structures dictate the flow of program execution, enabling decision-making and iteration — capabilities fundamental to embedded applications such as monitoring sensor thresholds or polling hardware states.</p>
+        <ul>
+            <li><strong>if/else statements:</strong> Conditional execution blocks that execute specific code paths based on boolean expressions. Example: <code>if (temperature > threshold) { activateCooling(); }</code></li>
+            <li><strong>switch/case:</strong> Multi-way branching for handling multiple discrete conditions efficiently, often used for state machine implementations.</li>
+            <li><strong>for loops:</strong> Deterministic iteration for known iteration counts, ideal for traversing arrays or executing a fixed number of operations.</li>
+            <li><strong>while loops:</strong> Conditional iteration that continues as long as a condition remains true, commonly used for waiting on hardware flags or continuous monitoring.</li>
+            <li><strong>do-while loops:</strong> Executes at least once before checking the condition, useful for initialization sequences that must run before condition evaluation.</li>
+        </ul>
+        
+        <h3>Functions and Modular Programming</h3>
+        <p>Functions decompose complex programs into reusable, testable units. In embedded systems, modularity is not merely aesthetic — it facilitates code reuse across projects, simplifies debugging, and enables team collaboration.</p>
+        <ul>
+            <li><strong>Function Declaration:</strong> The function signature specifying return type, name, and parameters — the contract between the function and its callers.</li>
+            <li><strong>Function Definition:</strong> The actual implementation containing the executable logic.</li>
+            <li><strong>Function Call:</strong> Invoking the function with specific arguments to achieve a desired outcome.</li>
+            <li><strong>Return Values:</strong> Functions can return computed results to the caller, enabling composition of complex operations from simpler building blocks.</li>
+            <li><strong>Scope:</strong> Variables declared within functions are local — they exist only during function execution — reducing unintended side effects.</li>
+        </ul>
+        
+        <h3>Pointers and Memory Management</h3>
+        <p>Pointers represent the most powerful and dangerous feature of C. A pointer is a variable that stores a memory address — the location of another variable in RAM. Through pointers, we can:</p>
+        <ul>
+            <li>Access hardware registers mapped to specific memory addresses</li>
+            <li>Pass large data structures efficiently without copying (by passing the address)</li>
+            <li>Implement dynamic data structures like linked lists and ring buffers</li>
+            <li>Manipulate individual bits within memory words</li>
+        </ul>
+        <p>However, pointer misuse — dereferencing null pointers, accessing freed memory, or pointer arithmetic errors — constitutes the leading cause of embedded software failures.</p>
+        
+        <h3>Bitwise Operations</h3>
+        <p>Embedded systems frequently require manipulation of individual bits within hardware registers. Bitwise operators provide this capability:</p>
+        <ul>
+            <li><strong>&amp; (AND):</strong> Clears specific bits: <code>reg = reg &amp; 0xF0;</code> clears the lower four bits</li>
+            <li><strong>| (OR):</strong> Sets specific bits: <code>reg = reg | 0x01;</code> sets the lowest bit</li>
+            <li><strong>^ (XOR):</strong> Toggles specific bits: <code>reg = reg ^ 0xFF;</code> inverts all bits</li>
+            <li><strong>~ (NOT):</strong> Inverts all bits in a value</li>
+            <li><strong>&lt;&lt; (Left Shift):</strong> Multiplies by powers of two or positions bits for masking</li>
+            <li><strong>&gt;&gt; (Right Shift):</strong> Divides by powers of two or extracts bit fields</li>
+        </ul>
+        
         <h2>Assembly Language</h2>
-        <p>We were also introduced to assembly language, the lowest-level programming language that directly corresponds to machine code instructions. Assembly language gives us complete control over the microcontroller's hardware.</p>
-        <p>Key assembly concepts included:</p>
+        <p>Assembly language represents the lowest tier of human-readable programming — each instruction corresponds directly to a single machine code instruction that the processor executes. While C abstracts hardware details for programmer convenience, Assembly grants absolute, granular control over every processor operation.</p>
+        
+        <h3>Registers and Memory Addressing</h3>
+        <p>Registers are the fastest memory locations within a processor — small storage areas built directly into the CPU silicon. The ARM Cortex-M4 processor (used in the Raspberry Pi Pico) contains:</p>
         <ul>
-            <li>Registers and memory addressing</li>
-            <li>Instruction sets</li>
-            <li>Assembly syntax and mnemonics</li>
-            <li>Interfacing with hardware peripherals</li>
+            <li><strong>General-Purpose Registers (R0-R12):</strong> Twelve registers for storing temporary values and function arguments. R0-R7 are accessible to all code; R8-R12 are banked in privileged modes.</li>
+            <li><strong>Stack Pointer (SP):</strong> Tracks the current position in memory where function call frames are stored. Two variants exist: Main Stack Pointer (MSP) for privileged code and Process Stack Pointer (PSP) for unprivileged applications.</li>
+            <li><strong>Link Register (LR):</strong> Stores the return address when a function is called, enabling the processor to resume execution at the correct location upon function return.</li>
+            <li><strong>Program Counter (PC):</strong> Contains the address of the next instruction to be executed — automatically incremented after each instruction.</li>
+            <li><strong>Program Status Register (PSR):</strong> Contains flags indicating arithmetic results (zero, negative, carry, overflow) and current processor mode.</li>
         </ul>
-        <h2>Programming for Controllers</h2>
-        <p>We learned how to write programs specifically for microcontrollers and embedded systems. This included understanding hardware constraints, optimizing code for limited resources, and working with peripherals like GPIO pins, timers, and interrupts.</p>
-        <h2>Basics of Rules in Embedded Systems</h2>
-        <p>We explored the fundamental rules and best practices for embedded systems programming:</p>
+        
+        <h3>Instruction Sets</h3>
+        <p>The ARM Cortex-M4 implements the Thumb-2 instruction set, a hybrid of 16-bit and 32-bit instructions that balances code density with performance:</p>
         <ul>
-            <li>Memory efficiency and optimization</li>
-            <li>Real-time constraints and timing</li>
-            <li>Hardware abstraction layers</li>
-            <li>Debugging and testing embedded code</li>
+            <li><strong>Data Processing:</strong> ADD, SUB, MUL, DIV, AND, ORR, EOR, MOV, CMP — arithmetic and logical operations</li>
+            <li><strong>Load/Store:</strong> LDR, STR, LDM, STM — transferring data between registers and memory</li>
+            <li><strong>Branch:</strong> B, BL, BX, BLX — controlling program flow through jumps and function calls</li>
+            <li><strong>Special:</strong> MRS, MSR — accessing special registers like the PSR and control registers</li>
         </ul>
-        <p>Week 2 provided us with the essential programming skills needed to develop firmware for embedded devices, bridging the gap between software and hardware.</p>
+        
+        <h3>Assembly Syntax and Mnemonics</h3>
+        <p>Assembly instructions follow a consistent pattern: <code>Mnemonic{condition}{flags} Destination, Source1, Source2</code></p>
+        <p>Example: <code>ADDS R0, R1, R2</code> adds R1 and R2, stores the result in R0, and updates the flags. The <code>S</code> suffix indicates flag update.</p>
+        
+        <h3>Interfacing with Hardware Peripherals</h3>
+        <p>Through Assembly, we can directly manipulate memory-mapped peripherals — hardware components (UART, SPI, I2C, GPIO) whose control registers appear as memory addresses to the processor. Writing to these addresses triggers hardware actions:</p>
+        <ul>
+            <li>Writing to a GPIO output register toggles pin voltage levels</li>
+            <li>Reading a UART status register reveals whether data is available</li>
+            <li>Configuring a timer register initiates countdown operations</li>
+        </ul>
+        
+        <h2>Programming for Microcontrollers</h2>
+        <p>Embedded programming differs fundamentally from desktop or web development. Microcontrollers impose strict constraints that shape every design decision:</p>
+        
+        <h3>Hardware Constraints</h3>
+        <ul>
+            <li><strong>Limited RAM:</strong> Typical embedded MCUs offer 2KB to 512KB of RAM — insufficient for naive memory allocation strategies</li>
+            <li><strong>Limited Flash:</strong> Program storage ranges from 8KB to 2MB, demanding efficient code and avoidance of unnecessary libraries</li>
+            <li><strong>No Operating System:</strong> The program runs directly on hardware — there is no memory protection, process isolation, or system calls</li>
+            <li><strong>Fixed Peripherals:</strong> Hardware peripherals are fixed at manufacturing — software must adapt to their capabilities</li>
+        </ul>
+        
+        <h3>Optimizing for Limited Resources</h3>
+        <ul>
+            <li><strong>Static Allocation:</strong> Prefer fixed-size arrays over dynamic allocation to avoid heap fragmentation</li>
+            <li><strong>Bit Fields:</strong> Pack multiple boolean flags into single bytes to conserve memory</li>
+            <li><strong>Inline Functions:</strong> Eliminate function call overhead for small, frequently-called routines</li>
+            <li><strong>Const Qualifier:</strong> Place constant data in flash memory rather than RAM</li>
+        </ul>
+        
+        <h3>Working with Peripherals</h3>
+        <ul>
+            <li><strong>GPIO (General-Purpose Input/Output):</strong> Configurable pins that can read external signals (input) or drive voltage levels (output)</li>
+            <li><strong>Timers:</strong> Hardware counters that generate precise timebase signals for PWM, input capture, or scheduling</li>
+            <li><strong>Interrupts:</strong> Asynchronous events that pause main program execution to handle time-critical events</li>
+            <li><strong>Communication Peripherals:</strong> UART, SPI, I2C for interfacing with sensors, displays, and other microcontrollers</li>
+        </ul>
+        
+        <h2>Fundamental Rules in Embedded Systems</h2>
+        <p>Embedded development is governed by principles that distinguish it from general software engineering:</p>
+        
+        <h3>Memory Efficiency</h3>
+        <p>Every byte has a cost. Embedded developers must:</p>
+        <ul>
+            <li>Calculate maximum memory usage before deployment</li>
+            <li>Use appropriate data types — avoid 32-bit integers when 8-bit suffices</li>
+            <li>Implement custom memory pools for predictable allocation</li>
+            <li>Monitor stack usage to prevent overflow</li>
+        </ul>
+        
+        <h3>Real-Time Constraints</h3>
+        <p>Many embedded applications have strict timing requirements:</p>
+        <ul>
+            <li><strong>Hard Real-Time:</strong> Missing a deadline causes system failure (e.g., airbag deployment)</li>
+            <li><strong>Soft Real-Time:</strong> Missing deadlines degrades performance but does not fail (e.g., audio playback)</li>
+            <li>Interrupt latency must be bounded and predictable</li>
+            <li>Algorithm complexity must be analyzed for worst-case execution time</li>
+        </ul>
+        
+        <h3>Hardware Abstraction Layers</h3>
+        <p>Abstraction separates hardware-specific code from application logic:</p>
+        <ul>
+            <li>Hardware Abstraction Layers (HAL) provide consistent APIs across MCU families</li>
+            <li>Board Support Packages (BSP) adapt HAL to specific hardware configurations</li>
+            <li>This separation enables portability — the same application can run on different hardware</li>
+        </ul>
+        
+        <h3>Debugging and Testing</h3>
+        <p>Embedded debugging presents unique challenges:</p>
+        <ul>
+            <li><strong>JTAG/SWD:</strong> Hardware debug interfaces for stepping through code and inspecting registers</li>
+            <li><strong>Serial Output:</strong> printf-style debugging via UART when hardware debuggers are unavailable</li>
+            <li><strong>Unit Testing:</strong> Testing individual functions in isolation from hardware</li>
+            <li><strong>Hardware-in-the-Loop:</strong> Testing with actual peripherals connected</li>
+        </ul>
+        
+        <p>Week 2 provided us with the essential programming competencies required to develop firmware for embedded devices. The dual mastery of C's abstraction and Assembly's granularity equips us to bridge the conceptual chasm between algorithmic intent and physical actuation — the fundamental objective of embedded systems engineering.</p>
+        
         <p><a href="index.html">Return to Main Page</a></p>
         <footer>
             <hr>
@@ -50,5 +177,4 @@
             <p>Author: @Zacchaues Munuhe</p>
         </footer>
     </body>
-</html>
 </html>
